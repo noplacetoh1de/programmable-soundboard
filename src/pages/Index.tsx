@@ -89,10 +89,10 @@ const Index = () => {
         onTempoChange={setTempo}
       />
       
-      <div className="grid grid-cols-3 gap-8">
+      <div className="flex flex-col gap-4">
         {WAVEFORMS.map((waveform) => (
           <div key={waveform} className="flex items-center gap-4">
-            <span className="text-sm capitalize w-24">{waveform} Gain</span>
+            <span className="text-sm capitalize w-32">{waveform} Wave</span>
             <Input
               type="number"
               min="0"

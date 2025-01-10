@@ -30,7 +30,12 @@ export class AudioEngine {
   playSound(id: string) {
     const gain = this.gains.get(id);
     if (gain) {
-      gain.gain.setValueAtTime(0.3, this.context.currentTime);
+      // Adjust gain value based on drum type
+      let gainValue = 0.3;
+      if (id.includes('snare')) gainValue = 0.4;
+      if (id.includes('hihat')) gainValue = 0.2;
+      
+      gain.gain.setValueAtTime(gainValue, this.context.currentTime);
     }
   }
 

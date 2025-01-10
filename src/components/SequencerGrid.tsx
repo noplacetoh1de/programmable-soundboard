@@ -11,12 +11,12 @@ interface DrumSound {
 }
 
 const DRUM_SOUNDS: DrumSound[] = [
-  { id: "kick", label: "Kick", frequency: 60, type: "sine" },
-  { id: "snare", label: "Snare", frequency: 200, type: "square" },
-  { id: "hihat", label: "Hi-Hat", frequency: 1000, type: "triangle" }
+  { id: "kick", label: "Kick", frequency: 40, type: "sine" },
+  { id: "snare", label: "Snare", frequency: 150, type: "triangle" },
+  { id: "hihat", label: "Hi-Hat", frequency: 2000, type: "square" }
 ];
 
-const STEPS = 16; // 2 bars × 8 steps each
+const STEPS = 16;
 
 interface SequencerGridProps {
   audioEngine: AudioEngine | null;
@@ -48,9 +48,13 @@ export const SequencerGrid = ({ audioEngine, isPlaying, currentStep }: Sequencer
         if (grid.has(stepId)) {
           const soundId = `${drum.id}-${drum.type}`;
           audioEngine.playSound(soundId);
+          
+          // Adjust duration based on drum type
+          const duration = drum.id === 'hihat' ? 50 : 100; // Shorter duration for hi-hat
+          
           setTimeout(() => {
             audioEngine.stopSound(soundId);
-          }, 100); // Short duration for percussion sounds
+          }, duration);
         }
       });
     }

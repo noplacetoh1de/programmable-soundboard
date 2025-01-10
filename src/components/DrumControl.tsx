@@ -9,7 +9,7 @@ interface DrumControlProps {
 
 export const DrumControl = ({ drum, gain, onGainChange }: DrumControlProps) => {
   return (
-    <div className="h-20 flex items-center">
+    <div className="flex items-center h-10">
       <Input
         type="number"
         min="0"

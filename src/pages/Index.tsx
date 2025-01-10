@@ -78,7 +78,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen p-8 flex flex-col gap-8">
+    <div className="mx-auto max-w-4xl min-h-screen p-8 flex flex-col gap-8">
       <div className="flex flex-col gap-4">
         <h1 className="text-4xl font-bold text-center">Programmable Soundboard</h1>
         {WAVEFORMS.map((waveform) => (

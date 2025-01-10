@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { SoundGrid } from "@/components/sound/SoundGrid";
 import { Sequencer } from "@/components/Sequencer";
 import { SequencerGrid } from "@/components/SequencerGrid";

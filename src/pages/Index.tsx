@@ -6,12 +6,12 @@ import { AudioEngine, createNoteFrequency } from "@/lib/audio";
 import { useToast } from "@/components/ui/use-toast";
 
 const NOTES = [60, 62, 64, 65, 67, 69, 71, 72];
-const WAVEFORMS: OscillatorType[] = ["sine", "square", "triangle"];
+const WAVEFORMS: OscillatorType[] = ["sine", "square", "triangle", "sawtooth"];
 
 const DRUM_SOUNDS = [
-  { id: "kick", label: "Kick", frequency: 60, type: "sine" },
-  { id: "snare", label: "Snare", frequency: 200, type: "square" },
-  { id: "hihat", label: "Hi-Hat", frequency: 1000, type: "triangle" }
+  { id: "kick", label: "Kick", frequency: 60, type: "sine" as OscillatorType },
+  { id: "snare", label: "Snare", frequency: 200, type: "square" as OscillatorType },
+  { id: "hihat", label: "Hi-Hat", frequency: 1000, type: "triangle" as OscillatorType }
 ];
 
 const Index = () => {

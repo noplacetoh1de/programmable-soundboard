@@ -1,11 +1,18 @@
 import { useState, useEffect, useCallback } from "react";
 import { SoundButton } from "@/components/SoundButton";
 import { Sequencer } from "@/components/Sequencer";
+import { SequencerGrid } from "@/components/SequencerGrid";
 import { AudioEngine, createNoteFrequency } from "@/lib/audio";
 import { useToast } from "@/components/ui/use-toast";
 
 const NOTES = [60, 62, 64, 65, 67, 69, 71, 72];
 const WAVEFORMS: OscillatorType[] = ["sine", "square", "triangle"];
+
+const DRUM_SOUNDS = [
+  { id: "kick", label: "Kick", frequency: 60, type: "sine" },
+  { id: "snare", label: "Snare", frequency: 200, type: "square" },
+  { id: "hihat", label: "Hi-Hat", frequency: 1000, type: "triangle" }
+];
 
 const Index = () => {
   const [audioEngine, setAudioEngine] = useState<AudioEngine | null>(null);
@@ -19,7 +26,7 @@ const Index = () => {
     const engine = new AudioEngine();
     setAudioEngine(engine);
 
-    // Initialize all possible sounds
+    // Initialize all possible sounds (including drum sounds)
     NOTES.forEach((note) => {
       WAVEFORMS.forEach((waveform) => {
         const id = `${note}-${waveform}`;
@@ -27,11 +34,27 @@ const Index = () => {
       });
     });
 
+    // Initialize drum sounds
+    ["kick", "snare", "hihat"].forEach((drumId) => {
+      const drum = DRUM_SOUNDS.find(d => d.id === drumId);
+      if (drum) {
+        const id = `${drumId}-${drum.type}`;
+        engine.createSound(id, drum.type, drum.frequency);
+      }
+    });
+
     return () => {
+      // Cleanup all sounds
       NOTES.forEach((note) => {
         WAVEFORMS.forEach((waveform) => {
           engine.cleanup(`${note}-${waveform}`);
         });
+      });
+      ["kick", "snare", "hihat"].forEach((drumId) => {
+        const drum = DRUM_SOUNDS.find(d => d.id === drumId);
+        if (drum) {
+          engine.cleanup(`${drumId}-${drum.type}`);
+        }
       });
     };
   }, []);
@@ -56,8 +79,8 @@ const Index = () => {
     if (!isPlaying) return;
 
     const interval = setInterval(() => {
-      setStep((prev) => (prev + 1) % 8);
-    }, (60 / tempo) * 1000);
+      setStep((prev) => (prev + 1) % 16); // Changed to 16 steps (2 bars × 8 steps)
+    }, (60 / tempo) * 1000 / 2); // Divided by 2 for eighth notes
 
     return () => clearInterval(interval);
   }, [isPlaying, tempo]);
@@ -115,6 +138,12 @@ const Index = () => {
           </div>
         ))}
       </div>
+
+      <SequencerGrid
+        audioEngine={audioEngine}
+        isPlaying={isPlaying}
+        currentStep={step}
+      />
     </div>
   );
 };

@@ -1,21 +1,8 @@
 import { useState, useCallback, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
+import { DrumControl } from "./DrumControl";
+import { DrumGridRow } from "./DrumGridRow";
 import { AudioEngine } from "@/lib/audio";
-
-interface DrumSound {
-  id: string;
-  label: string;
-  frequency: number;
-  type: OscillatorType;
-}
-
-const DRUM_SOUNDS: DrumSound[] = [
-  { id: "kick", label: "Kick", frequency: 40, type: "sine" },
-  { id: "snare", label: "Snare", frequency: 150, type: "triangle" },
-  { id: "hihat", label: "Hi-Hat", frequency: 2000, type: "square" }
-];
+import { DRUM_SOUNDS } from "@/lib/constants";
 
 const STEPS = 16;
 
@@ -59,7 +46,6 @@ export const SequencerGrid = ({ audioEngine, isPlaying, currentStep }: Sequencer
     }
   };
 
-  // Trigger sound when current step has active notes
   useEffect(() => {
     if (isPlaying && audioEngine) {
       DRUM_SOUNDS.forEach((drum) => {
@@ -68,8 +54,7 @@ export const SequencerGrid = ({ audioEngine, isPlaying, currentStep }: Sequencer
           const soundId = `${drum.id}-${drum.type}`;
           audioEngine.playSound(soundId, gains[drum.id]);
           
-          // Adjust duration based on drum type
-          const duration = drum.id === 'hihat' ? 50 : 100; // Shorter duration for hi-hat
+          const duration = drum.id === 'hihat' ? 50 : 100;
           
           setTimeout(() => {
             audioEngine.stopSound(soundId);
@@ -84,42 +69,25 @@ export const SequencerGrid = ({ audioEngine, isPlaying, currentStep }: Sequencer
       <div className="grid grid-cols-[100px_1fr_100px] gap-4">
         <div className="space-y-4">
           {DRUM_SOUNDS.map((drum) => (
-            <div key={drum.id} className="h-10 flex items-center">
-              {drum.label}
-            </div>
+            <DrumControl
+              key={drum.id}
+              drum={drum}
+              gain={gains[drum.id]}
+              onGainChange={(value) => handleGainChange(drum.id, value)}
+            />
           ))}
         </div>
         <div className="grid grid-cols-16 gap-1">
           {DRUM_SOUNDS.map((drum) => (
-            <div key={drum.id} className="contents">
-              {Array.from({ length: STEPS }, (_, i) => (
-                <Button
-                  key={i}
-                  variant="outline"
-                  className={cn(
-                    "w-full h-10 p-0",
-                    grid.has(`${drum.id}-${i}`) && "bg-neon-muted border-neon",
-                    currentStep === i && isPlaying && "ring-2 ring-primary"
-                  )}
-                  onClick={() => toggleStep(drum.id, i)}
-                />
-              ))}
-            </div>
-          ))}
-        </div>
-        <div className="space-y-4">
-          {DRUM_SOUNDS.map((drum) => (
-            <div key={drum.id} className="h-10 flex items-center">
-              <Input
-                type="number"
-                min="0"
-                max="1"
-                step="0.1"
-                value={gains[drum.id]}
-                onChange={(e) => handleGainChange(drum.id, e.target.value)}
-                className="w-20 h-8"
-              />
-            </div>
+            <DrumGridRow
+              key={drum.id}
+              drum={drum}
+              steps={STEPS}
+              activeSteps={grid}
+              currentStep={currentStep}
+              isPlaying={isPlaying}
+              onToggleStep={(step) => toggleStep(drum.id, step)}
+            />
           ))}
         </div>
       </div>

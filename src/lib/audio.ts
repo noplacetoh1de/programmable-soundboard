@@ -1,15 +1,27 @@
 export class AudioEngine {
-  private context: AudioContext;
+  private context: AudioContext | null;
   private oscillators: Map<string, OscillatorNode>;
   private gains: Map<string, GainNode>;
 
   constructor() {
-    this.context = new AudioContext();
+    // Initialize as null, we'll create it on first user interaction
+    this.context = null;
     this.oscillators = new Map();
     this.gains = new Map();
   }
 
+  private initializeContext() {
+    if (!this.context) {
+      this.context = new AudioContext();
+      // Resume the context as it might start in suspended state
+      this.context.resume();
+    }
+  }
+
   createSound(id: string, type: OscillatorType, frequency: number) {
+    this.initializeContext();
+    if (!this.context) return;
+
     const oscillator = this.context.createOscillator();
     const gain = this.context.createGain();
     
@@ -28,22 +40,23 @@ export class AudioEngine {
   }
 
   playSound(id: string, gainValue: number = 0.3) {
+    this.initializeContext();
     const gain = this.gains.get(id);
-    if (gain) {
+    if (gain && this.context) {
       gain.gain.setValueAtTime(gainValue, this.context.currentTime);
     }
   }
 
   stopSound(id: string) {
     const gain = this.gains.get(id);
-    if (gain) {
+    if (gain && this.context) {
       gain.gain.setValueAtTime(0, this.context.currentTime);
     }
   }
 
   setGain(id: string, value: number) {
     const gain = this.gains.get(id);
-    if (gain) {
+    if (gain && this.context) {
       gain.gain.setValueAtTime(value, this.context.currentTime);
     }
   }

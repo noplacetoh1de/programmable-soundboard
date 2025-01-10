@@ -10,16 +10,22 @@ export class AudioEngine {
     this.gains = new Map();
   }
 
-  private initializeContext() {
+  private async initializeContext() {
     if (!this.context) {
       this.context = new AudioContext();
-      // Resume the context as it might start in suspended state
-      this.context.resume();
+    }
+    
+    if (this.context.state === 'suspended') {
+      try {
+        await this.context.resume();
+      } catch (error) {
+        console.warn('Failed to resume AudioContext:', error);
+      }
     }
   }
 
-  createSound(id: string, type: OscillatorType, frequency: number) {
-    this.initializeContext();
+  async createSound(id: string, type: OscillatorType, frequency: number) {
+    await this.initializeContext();
     if (!this.context) return;
 
     const oscillator = this.context.createOscillator();
@@ -39,22 +45,24 @@ export class AudioEngine {
     this.gains.set(id, gain);
   }
 
-  playSound(id: string, gainValue: number = 0.3) {
-    this.initializeContext();
+  async playSound(id: string, gainValue: number = 0.3) {
+    await this.initializeContext();
     const gain = this.gains.get(id);
     if (gain && this.context) {
       gain.gain.setValueAtTime(gainValue, this.context.currentTime);
     }
   }
 
-  stopSound(id: string) {
+  async stopSound(id: string) {
+    await this.initializeContext();
     const gain = this.gains.get(id);
     if (gain && this.context) {
       gain.gain.setValueAtTime(0, this.context.currentTime);
     }
   }
 
-  setGain(id: string, value: number) {
+  async setGain(id: string, value: number) {
+    await this.initializeContext();
     const gain = this.gains.get(id);
     if (gain && this.context) {
       gain.gain.setValueAtTime(value, this.context.currentTime);

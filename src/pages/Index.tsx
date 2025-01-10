@@ -4,7 +4,6 @@ import { Sequencer } from "@/components/Sequencer";
 import { SequencerGrid } from "@/components/SequencerGrid";
 import { useAudioEngine } from "@/hooks/useAudioEngine";
 import { useToast } from "@/hooks/use-toast";
-import { Input } from "@/components/ui/input";
 import { WAVEFORMS } from "@/lib/constants";
 
 const Index = () => {
@@ -79,23 +78,7 @@ const Index = () => {
 
   return (
     <div className="mx-auto max-w-4xl min-h-screen p-8 flex flex-col gap-8">
-      <div className="flex flex-col gap-4">
-        <h1 className="text-4xl font-bold text-center">Programmable Soundboard</h1>
-        {WAVEFORMS.map((waveform) => (
-          <div key={waveform} className="flex items-center justify-center gap-4">
-            <span className="text-sm capitalize">{waveform} Wave</span>
-            <Input
-              type="number"
-              min="0"
-              max="1"
-              step="0.1"
-              value={waveGains[waveform as keyof typeof waveGains]}
-              onChange={(e) => handleWaveGainChange(waveform, e.target.value)}
-              className="w-20 h-8"
-            />
-          </div>
-        ))}
-      </div>
+      <h1 className="text-4xl font-bold text-center">Programmable Soundboard</h1>
       
       <Sequencer
         isPlaying={isPlaying}
@@ -108,6 +91,8 @@ const Index = () => {
       <SoundGrid
         activeNotes={activeNotes}
         onToggleNote={toggleNote}
+        waveGains={waveGains}
+        onWaveGainChange={handleWaveGainChange}
       />
 
       <SequencerGrid

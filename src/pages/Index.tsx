@@ -69,7 +69,7 @@ const Index = () => {
   };
 
   return (
-    <div className="mx-auto max-w-4xl min-h-screen p-8 flex flex-col gap-8">
+    <div className="mx-auto max-w-6xl min-h-screen p-8 flex flex-col gap-8">
       <div className="flex justify-between items-center">
         <Header />
         <Dialog>
@@ -81,10 +81,10 @@ const Index = () => {
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>How to use Loop Melody Maker</DialogTitle>
+              <DialogTitle>How to use Programmable Soundboard</DialogTitle>
               <DialogDescription className="text-left space-y-4 pt-4">
                 <p>
-                  Loop Melody Maker is an interactive web application that allows you to create musical loops using different waveforms.
+                  Programmable Soundboard is an interactive web application that allows you to create musical loops using different waveforms.
                 </p>
                 <p>
                   1. Use the grid to toggle notes on/off for different waveforms (sine, square, sawtooth)

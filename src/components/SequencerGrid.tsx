@@ -66,17 +66,7 @@ export const SequencerGrid = ({ audioEngine, isPlaying, currentStep }: Sequencer
 
   return (
     <div className="space-y-2 p-4 bg-secondary rounded-lg">
-      <div className="grid grid-cols-[100px_1fr_100px] gap-4">
-        <div className="space-y-4">
-          {DRUM_SOUNDS.map((drum) => (
-            <DrumControl
-              key={drum.id}
-              drum={drum}
-              gain={gains[drum.id]}
-              onGainChange={(value) => handleGainChange(drum.id, value)}
-            />
-          ))}
-        </div>
+      <div className="grid grid-cols-[1fr_100px] gap-4">
         <div className="grid grid-cols-16 gap-1">
           {DRUM_SOUNDS.map((drum) => (
             <DrumGridRow
@@ -87,6 +77,16 @@ export const SequencerGrid = ({ audioEngine, isPlaying, currentStep }: Sequencer
               currentStep={currentStep}
               isPlaying={isPlaying}
               onToggleStep={(step) => toggleStep(drum.id, step)}
+            />
+          ))}
+        </div>
+        <div className="space-y-4">
+          {DRUM_SOUNDS.map((drum) => (
+            <DrumControl
+              key={drum.id}
+              drum={drum}
+              gain={gains[drum.id]}
+              onGainChange={(value) => handleGainChange(drum.id, value)}
             />
           ))}
         </div>

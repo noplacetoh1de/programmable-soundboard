@@ -4,6 +4,8 @@ import { Sequencer } from "@/components/Sequencer";
 import { SequencerGrid } from "@/components/SequencerGrid";
 import { useAudioEngine } from "@/hooks/useAudioEngine";
 import { useToast } from "@/hooks/use-toast";
+import { Input } from "@/components/ui/input";
+import { WAVEFORMS } from "@/lib/constants";
 
 const Index = () => {
   const audioEngine = useAudioEngine();
@@ -12,10 +14,16 @@ const Index = () => {
   const [tempo, setTempo] = useState(120);
   const [step, setStep] = useState(0);
   const { toast } = useToast();
+  const [waveGains, setWaveGains] = useState({
+    sine: 0.3,
+    square: 0.3,
+    sawtooth: 0.3
+  });
 
   const toggleNote = useCallback((id: string) => {
     if (!audioEngine) return;
 
+    const [note, waveform] = id.split('-');
     if (activeNotes.has(id)) {
       audioEngine.stopSound(id);
       setActiveNotes((prev) => {
@@ -24,10 +32,27 @@ const Index = () => {
         return next;
       });
     } else {
-      audioEngine.playSound(id);
+      audioEngine.playSound(id, waveGains[waveform as keyof typeof waveGains]);
       setActiveNotes((prev) => new Set(prev).add(id));
     }
-  }, [audioEngine, activeNotes]);
+  }, [audioEngine, activeNotes, waveGains]);
+
+  const handleWaveGainChange = (waveform: string, value: string) => {
+    const numValue = parseFloat(value);
+    if (!isNaN(numValue) && numValue >= 0 && numValue <= 1) {
+      setWaveGains(prev => ({
+        ...prev,
+        [waveform]: numValue
+      }));
+      
+      // Update gains for any currently playing notes of this waveform
+      activeNotes.forEach(noteId => {
+        if (noteId.endsWith(waveform) && audioEngine) {
+          audioEngine.setGain(noteId, numValue);
+        }
+      });
+    }
+  };
 
   useEffect(() => {
     if (!isPlaying) return;
@@ -63,6 +88,23 @@ const Index = () => {
         tempo={tempo}
         onTempoChange={setTempo}
       />
+      
+      <div className="grid grid-cols-3 gap-8">
+        {WAVEFORMS.map((waveform) => (
+          <div key={waveform} className="flex items-center gap-4">
+            <span className="text-sm capitalize w-24">{waveform} Gain</span>
+            <Input
+              type="number"
+              min="0"
+              max="1"
+              step="0.1"
+              value={waveGains[waveform as keyof typeof waveGains]}
+              onChange={(e) => handleWaveGainChange(waveform, e.target.value)}
+              className="w-20 h-8"
+            />
+          </div>
+        ))}
+      </div>
       
       <SoundGrid
         activeNotes={activeNotes}

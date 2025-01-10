@@ -27,14 +27,9 @@ export class AudioEngine {
     this.gains.set(id, gain);
   }
 
-  playSound(id: string) {
+  playSound(id: string, gainValue: number = 0.3) {
     const gain = this.gains.get(id);
     if (gain) {
-      // Adjust gain value based on drum type
-      let gainValue = 0.3;
-      if (id.includes('snare')) gainValue = 0.4;
-      if (id.includes('hihat')) gainValue = 0.2;
-      
       gain.gain.setValueAtTime(gainValue, this.context.currentTime);
     }
   }
@@ -43,6 +38,13 @@ export class AudioEngine {
     const gain = this.gains.get(id);
     if (gain) {
       gain.gain.setValueAtTime(0, this.context.currentTime);
+    }
+  }
+
+  setGain(id: string, value: number) {
+    const gain = this.gains.get(id);
+    if (gain) {
+      gain.gain.setValueAtTime(value, this.context.currentTime);
     }
   }
 

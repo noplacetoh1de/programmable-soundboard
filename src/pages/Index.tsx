@@ -79,20 +79,11 @@ const Index = () => {
 
   return (
     <div className="min-h-screen p-8 flex flex-col gap-8">
-      <h1 className="text-4xl font-bold text-center">Programmable Soundboard</h1>
-      
-      <Sequencer
-        isPlaying={isPlaying}
-        onPlayPause={handlePlayPause}
-        onReset={handleReset}
-        tempo={tempo}
-        onTempoChange={setTempo}
-      />
-      
       <div className="flex flex-col gap-4">
+        <h1 className="text-4xl font-bold text-center">Programmable Soundboard</h1>
         {WAVEFORMS.map((waveform) => (
-          <div key={waveform} className="flex items-center gap-4">
-            <span className="text-sm capitalize w-32">{waveform} Wave</span>
+          <div key={waveform} className="flex items-center justify-center gap-4">
+            <span className="text-sm capitalize">{waveform} Wave</span>
             <Input
               type="number"
               min="0"
@@ -105,6 +96,14 @@ const Index = () => {
           </div>
         ))}
       </div>
+      
+      <Sequencer
+        isPlaying={isPlaying}
+        onPlayPause={handlePlayPause}
+        onReset={handleReset}
+        tempo={tempo}
+        onTempoChange={setTempo}
+      />
       
       <SoundGrid
         activeNotes={activeNotes}

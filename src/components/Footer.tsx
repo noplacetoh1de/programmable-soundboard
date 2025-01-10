@@ -12,7 +12,7 @@ const Footer = () => {
             lukasjost.de
           </a>
           <a 
-            href="https://github.com/noplacetoh1de/loopmelody-maker" 
+            href="https://github.com/noplacetoh1de/programmable-soundboard" 
             target="_blank" 
             rel="noopener noreferrer"
             className="hover:text-white transition-colors"

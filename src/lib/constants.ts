@@ -3,6 +3,6 @@ export const WAVEFORMS: OscillatorType[] = ["sine", "square", "triangle", "sawto
 
 export const DRUM_SOUNDS = [
   { id: "kick", label: "Kick", frequency: 40, type: "sine" as OscillatorType },  // Lower frequency for deeper kick
-  { id: "snare", label: "Snare", frequency: 150, type: "triangle" as OscillatorType },  // Changed to triangle wave for snappier sound
+  { id: "snare", label: "Snare", frequency: 800, type: "sawtooth" as OscillatorType },  // Higher frequency with sawtooth for noise-like sound
   { id: "hihat", label: "Hi-Hat", frequency: 2000, type: "square" as OscillatorType }  // Higher frequency and square wave for metallic sound
 ];

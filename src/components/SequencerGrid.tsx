@@ -66,7 +66,14 @@ export const SequencerGrid = ({ audioEngine, isPlaying, currentStep }: Sequencer
 
   return (
     <div className="space-y-2 p-4 bg-secondary rounded-lg">
-      <div className="grid grid-cols-[1fr_100px] gap-4">
+      <div className="grid grid-cols-[100px_1fr_100px] gap-4">
+        <div className="space-y-4">
+          {DRUM_SOUNDS.map((drum) => (
+            <div key={drum.id} className="h-20 flex items-center">
+              {drum.label}
+            </div>
+          ))}
+        </div>
         <div className="grid grid-cols-16 gap-1">
           {DRUM_SOUNDS.map((drum) => (
             <DrumGridRow

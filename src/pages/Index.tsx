@@ -3,7 +3,7 @@ import { SoundGrid } from "@/components/sound/SoundGrid";
 import { Sequencer } from "@/components/Sequencer";
 import { SequencerGrid } from "@/components/SequencerGrid";
 import { useAudioEngine } from "@/hooks/useAudioEngine";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 
 const Index = () => {
   const audioEngine = useAudioEngine();
@@ -40,13 +40,6 @@ const Index = () => {
   }, [isPlaying, tempo]);
 
   const handlePlayPause = () => {
-    if (!isPlaying && activeNotes.size === 0) {
-      toast({
-        title: "No sounds selected",
-        description: "Click some buttons to create a sequence first!",
-      });
-      return;
-    }
     setIsPlaying(!isPlaying);
   };
 

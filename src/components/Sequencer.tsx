@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Play, Square, RotateCcw } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface SequencerProps {
   isPlaying: boolean;
